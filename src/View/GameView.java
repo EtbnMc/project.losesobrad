@@ -6,6 +6,12 @@ import Model.Map;
 
 public class GameView {
 
+    //colores
+    private static final String RESET = "\033[0m";
+    private static final String CYAN = "\033[36m";
+    private static final String RED = "\033[31m";
+    private static final String PURPLE = "\033[35m";
+
     //aesthetic
 
     public void displayMap(Map map) {
@@ -22,8 +28,13 @@ public class GameView {
         }
 
         printHorizontalBorder(map.getColumns());
-        System.out.println("  Legend:  H = Hero   E = Enemy   B = Boss   . = Empty");
-        System.out.println();
+        System.out.print("  Legend:  ");
+        System.out.print("  H = Hero  ");
+        System.out.print("  E = Enemy   ");
+        System.out.print("  B = Boss   ");
+        System.out.println("   . = Empty");
+
+
     }
 
     private void printHorizontalBorder(int columns) {
