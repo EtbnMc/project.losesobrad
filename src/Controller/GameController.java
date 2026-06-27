@@ -346,7 +346,7 @@ public class GameController {
         return c;
     }
 }
-private void saveGame() {
+private void saveGame() { //estos son los metodos que correspoden al guardado y al de cargar partida
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("savegame.dat"))) {
             
             oos.writeObject(map);
