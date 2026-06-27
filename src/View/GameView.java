@@ -35,7 +35,7 @@ public class GameView {
                 } else if (cell == 'B') {
                     System.out.print(PURPLE + "B " + RESET);
                 } else if (cell == Map.Wall) {
-                    System.out.print(GRIS + "— " + RESET);
+                    System.out.print(GRIS + "# " + RESET);
                 } else {
                     System.out.print(GRIS + ". ");
                 }
@@ -51,7 +51,7 @@ public class GameView {
         System.out.print(RED + "  E = Enemy   ");
         System.out.print(PURPLE + "  B = Boss   " +  RESET);
         System.out.println(GRIS + "   . = Empty");
-        System.out.println(GRIS + " — = Wall");
+        System.out.println(GRIS + " # = Wall");
     }
 
     private void printHorizontalBorder(int columns) {
