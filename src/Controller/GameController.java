@@ -2,7 +2,6 @@ package Controller;
 
 import Model.*;
 import View.GameView;
-
 import java.io.*;
 import java.util.Scanner;
 
