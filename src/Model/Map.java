@@ -64,8 +64,10 @@ public class Map implements Serializable {
 
     public char[][] getGrid(){
         return grid; }
+
     public int getRows(){
         return rows; }
+
     public int getColumns(){
         return columns; }
 }
