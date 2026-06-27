@@ -183,7 +183,7 @@ public class GameGUI extends JFrame {
                 if      (cell == 'H')       bg = COLOR_HERO;
                 else if (cell == 'E')       bg = COLOR_ENEMY;
                 else if (cell == 'B')       bg = COLOR_BOSS;
-                else if (cell == Map.Wall)  bg = COLOR_WALL;   // ✅ usa Map.Wall directamente
+                else if (cell == Map.Wall)  bg = COLOR_WALL;  
                 else if (cell == 'C')       bg = COLOR_CHEST;
                 else                        bg = COLOR_EMPTY;
 
@@ -227,7 +227,7 @@ public class GameGUI extends JFrame {
     }
 
     public void log(String message) {
-        logArea.append(message + "\n");
+        logArea.append(message + " ");
         logArea.setCaretPosition(logArea.getDocument().getLength());
     }
 
@@ -248,11 +248,11 @@ public class GameGUI extends JFrame {
         UIManager.put("OptionPane.messageForeground", COLOR_TEXT);
 
         int result = JOptionPane.showOptionDialog(
-                this, panel, "⚔ BATTLE",
+                this, panel, " BATTLE",
                 JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE,
                 null, options, options[0]);
 
-        return (result < 0) ? 1 : result + 1;   // 1=atk 2=heal 3=run
+        return (result < 0) ? 1 : result + 1;   // esto le dará 1=atk 2=heal 3=run
     }
 
     public void showMessage(String title, String msg) {
