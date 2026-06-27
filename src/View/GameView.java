@@ -4,7 +4,6 @@ import Model.*;
 
 public class GameView {
 
-
     private static final String YELLOW= "\033[33m";
     private static final String PURPLE = "\033[35m";
     private static final String GRAY = "\033[90m";
