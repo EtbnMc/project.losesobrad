@@ -342,9 +342,9 @@ public class GameController {
             return (char) (c - 32);
         }
         return c;
+        
     }
-}
-private void saveGame() { //estos son los metodos que correspoden al guardado y al de cargar partida
+    rivate void saveGame() { //estos son los metodos que correspoden al guardado y al de cargar partida
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("savegame.dat"))) {
             
             oos.writeObject(map);
@@ -380,3 +380,4 @@ private void saveGame() { //estos son los metodos que correspoden al guardado y 
         }
     }
 }
+
