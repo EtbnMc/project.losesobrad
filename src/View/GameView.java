@@ -5,13 +5,13 @@ import Model.*;
 public class GameView {
 
     private static final String YELLOW= "\033[33m";
-    private static final String PURPLE   = "\033[35m";
-    private static final String GRAY     = "\033[90m";
-    private static final String GREEN    = "\033[32m";
-    private static final String RED     = "\033[31m";
-    private static final String CYAN     = "\033[36m";
+    private static final String PURPLE = "\033[35m";
+    private static final String GRAY = "\033[90m";
+    private static final String GREEN = "\033[32m";
+    private static final String RED = "\033[31m";
+    private static final String CYAN = "\033[36m";
     private static final String BROWN = "\033[38;5;130m";
-    private static final String RESET    = "\033[0m";
+    private static final String RESET = "\033[0m";
 
     //aesthetic
 
