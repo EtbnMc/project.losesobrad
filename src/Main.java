@@ -1,9 +1,14 @@
 import Controller.GameController;
+import View.GameGUI;
+import javax.swing.SwingUtilities;
 
 public class Main {
+
     public static void main(String[] args) {
-        GameController gameController = new GameController();
-        gameController.startGame();
+        GameController controller = new GameController();
+        SwingUtilities.invokeLater(() -> {
+            GameGUI gui = new GameGUI(controller);
+            controller.startGUI();
+        });
     }
 }
-
