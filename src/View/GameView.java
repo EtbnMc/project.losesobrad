@@ -3,18 +3,9 @@ package View;
 import Model.Boss;
 import Model.Hero;
 import Model.Map;
-import java.util.Scanner;
-
 
 public class GameView {
 
-    //colores
-    private static final String RESET = "\033[0m";
-    private static final String CYAN = "\033[36m";
-    private static final String RED = "\033[31m";
-    private static final String PURPLE = "\033[35m";
-    public static final String GRIS = "\u001B[37m";
-    public static final String YELLOW = "\u001B[33m";
     //aesthetic
 
     public void displayMap(Map map) {
@@ -24,34 +15,15 @@ public class GameView {
         char[][] grid = map.getGrid();
         for (int i = 0; i < map.getRows(); i++) {
             System.out.print("  | ");
-
             for (int j = 0; j < map.getColumns(); j++) {
-                char cell = grid[i][j];
-
-                if (cell == 'H') {
-                    System.out.print(CYAN + "H " + RESET);
-                } else if (cell == 'E') {
-                    System.out.print(RED + "E " + RESET);
-                } else if (cell == 'B') {
-                    System.out.print(PURPLE + "B " + RESET);
-                } else if (cell == Map.Wall) {
-                    System.out.print(GRIS + "# " + RESET);
-                } else {
-                    System.out.print(GRIS + ". ");
-                }
+                System.out.print(grid[i][j] + " ");
             }
-
-
-            System.out.println(GRIS + "|");
+            System.out.println("|");
         }
 
         printHorizontalBorder(map.getColumns());
-        System.out.print("  Legend:  ");
-        System.out.print(CYAN + "  H = Hero  ");
-        System.out.print(RED + "  E = Enemy   ");
-        System.out.print(PURPLE + "  B = Boss   " +  RESET);
-        System.out.println(GRIS + "   . = Empty");
-        System.out.println(GRIS + " # = Wall");
+        System.out.println("  Legend:  H = Hero   E = Enemy   B = Boss");
+        System.out.println();
     }
 
     private void printHorizontalBorder(int columns) {
@@ -63,13 +35,14 @@ public class GameView {
     }
 
     public void displayHeroStatus(Hero hero) {
-        System.out.println(GRIS + "=================================================");
+        System.out.println("=================================================");
         System.out.println(" " + hero);
-        System.out.println(GRIS + "=================================================");
+        System.out.println("=================================================");
     }
 
     public void displayMovePrompt() {
-        System.out.print("  Move (W/A/S/D) | G = Save | C = Load | Q = Quit: ");
+        System.out.print(" Move (W/A/S/D) or Q to quit: ");
+
     }
 
     public void displayInvalidKey() {
@@ -77,28 +50,28 @@ public class GameView {
     }
 
     public void displayBoundaryReached() {
-        System.out.println(YELLOW + "  You cannot leave the map "+  RESET);
+        System.out.println("  You cannot leave the map ");
     }
 
     public void displayCellBlocked() {
-        System.out.println(YELLOW + "  Another enemy is already there. Choose a different direction."+  RESET);
+        System.out.println("  Another enemy is already there. Choose a different direction.");
     }
 
     public void displayMoved(int x, int y) {
-        System.out.println(YELLOW + "  Moved to (" + x + "," + y + ")"+  RESET);
+        System.out.println("  Moved to (" + x + "," + y + ")");
     }
 
     public void displayQuitMessage() {
-        System.out.println(YELLOW + "  You left the dungeon. "+  RESET);
+        System.out.println("  You left the dungeon. ");
     }
 
     public void displayGoodbye() {
-        System.out.println(YELLOW + "  tnks 4 playing my game, gg "+  RESET);
+        System.out.println("  tnks 4 playing my game, gg ");
     }
 
     public void displayWelcome(Hero hero, Boss boss) {
         System.out.println();
-        System.out.println(GRIS + "+================================================+");
+        System.out.println("+================================================+");
         System.out.println("|                  MINECRAFT 2                   |");
         System.out.println("+================================================+");
         System.out.println("|  Hero: " + padRight(hero.getName(), 40) + "|");
@@ -106,6 +79,7 @@ public class GameView {
         System.out.println("+================================================+");
         System.out.println("|  Move with W A S D and explore the map.        |");
         System.out.println("|  Defeat the Boss to win.                       |");
+        System.out.println("|  Press G to save and C to load the run.        |");
         System.out.println("+================================================+");
     }
 

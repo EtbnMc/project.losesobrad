@@ -49,4 +49,3 @@ public class Region implements Serializable {
         return "Region: " + name + " | Enemies: " + totalEnemies;
     }
 }
-

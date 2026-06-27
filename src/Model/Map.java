@@ -71,4 +71,3 @@ public class Map implements Serializable {
     public int getColumns(){
         return columns; }
 }
-
