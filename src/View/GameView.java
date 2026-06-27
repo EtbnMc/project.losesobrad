@@ -50,6 +50,7 @@ public class GameView {
                 }
             }
 
+
             System.out.println("|");
         }
 
