@@ -3,6 +3,8 @@ package View;
 import Model.Boss;
 import Model.Hero;
 import Model.Map;
+import java.util.Scanner;
+
 
 public class GameView {
 
