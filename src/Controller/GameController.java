@@ -1,17 +1,20 @@
 package Controller;
-
 import Model.*;
+import View.GameGUI;
 import View.GameView;
 import java.io.*;
 import java.util.Scanner;
+import Controller.GameController;
 
 public class GameController {
 
-    //map, entity location
     private static final int Rows = 15;
     private static final int Columns = 15;
+
     private final Scanner scanner;
     private final GameView view;
+    private GameGUI gui; 
+
     private Map map;
     private Hero hero;
     private Boss boss;
@@ -24,18 +27,76 @@ public class GameController {
         this.view = new GameView();
     }
 
+
+    public void setGUI(GameGUI gui) {
+        this.gui = gui;
+    }
+
+    public Map getMap() {
+        return map;
+    }
+
+
+    public void startGUI() {
+        setupWorld();
+        gui.refreshMap();
+        gui.updateHeroStatus("HERO — HP: " + hero.getHealth() + "/" + hero.getMaxHealth());
+        gui.log("Welcome! Use WASD to move. Defeat the Enderdragon to win!");
+    }
+
+
+    public void handleKey(char key) {
+        key = toUpperCaseManual(key);
+
+        if (key == 'Q') {
+            gui.showMessage("Goodbye", "Thanks for playing! gg");
+            System.exit(0);
+        }
+
+        if (key == 'G') {
+            saveGame();
+            return;
+        }
+
+        if (key == 'C') {
+            if (loadGame()) {
+                gui.refreshMap();
+                gui.updateHeroStatus("HERO — HP: " + hero.getHealth() + "/" + hero.getMaxHealth());
+                gui.log("Game loaded!");
+            }
+            return;
+        }
+
+        if ("WASD".indexOf(key) < 0) return;
+
+        boolean turnConsumed = processHeroMove(key);
+
+        if (turnConsumed) {
+            moveEnemiesRandomly();
+        }
+
+        gui.refreshMap();
+        gui.updateHeroStatus("HERO — HP: " + hero.getHealth() + "/" + hero.getMaxHealth());
+
+        if (!hero.isAlive()) {
+            gui.showMessage("DEFEAT", "GAME OVER\nStay determined...");
+            System.exit(0);
+        }
+
+        if (boss.wasDefeated()) {
+            gui.showMessage("VICTORY", hero.getName() + " has freed The End!\nHP: " + hero.getHealth() + "/" + hero.getMaxHealth());
+            System.exit(0);
+        }
+    }
+
     public void startGame() {
         setupWorld();
         view.displayWelcome(hero, boss);
         view.displayMap(map);
-
         runMainLoop();
-
         view.displayGoodbye();
         scanner.close();
     }
-
-    //default enemy spawn and world setup
 
     private void setupWorld() {
         map = new Map(Rows, Columns);
@@ -53,7 +114,6 @@ public class GameController {
         region.spawnEnemy("Piglin",5, 13);
         region.spawnEnemy("Ghast",9, 1);
 
-        //lugar paredes x:fila, y:column
         map.Wall(1, 1);
         map.Wall(1, 2);
         map.Wall(1, 3);
@@ -70,22 +130,18 @@ public class GameController {
         map.Wall(8, 13);
         map.Wall(8, 14);
 
-        //boss room: sealed box in the bottom-right corner, rows 10-14, columns 10-14
-        //the only way in is the single Door cell, every other border cell is a wall
         for (int col = 10; col <= 14; col++) {
             map.Wall(10, col);
         }
         for (int row = 10; row <= 14; row++) {
             map.Wall(row, 10);
         }
-        //(10,12) is left open for the Door, carved out right after the loops below
 
         enemies = region.getEnemies();
 
         region.spawnChest("Mimic Chest", 1, 13);
         chests = region.getChests();
 
-        //door is the only entrance to the boss room
         door = new Door(10, 12);
         map.placeSymbol(10, 12, Map.DoorClosedSy);
 
@@ -100,30 +156,13 @@ public class GameController {
             view.displayMovePrompt();
 
             String input = scanner.nextLine().trim();
-            if (input.isEmpty()) {
-                continue;
-            }
+            if (input.isEmpty()) continue;
 
             char key = toUpperCaseManual(input.charAt(0));
 
-            if (key == 'Q') {
-                view.displayQuitMessage();
-                break;
-            }
-
-            if (key == 'G') {
-                saveGame();
-                continue;
-            }
-
-
-            if (key == 'C') {
-                if (loadGame()) {
-                    view.displayMap(map);
-                }
-                continue;
-            }
-            // la tecla g es para guardar el juego y la c es para cargar el juego que el usuario guardo
+            if (key == 'Q') { view.displayQuitMessage(); break; }
+            if (key == 'G') { saveGame(); continue; }
+            if (key == 'C') { if (loadGame()) view.displayMap(map); continue; }
 
             if (key != 'W' && key != 'A' && key != 'S' && key != 'D') {
                 view.displayInvalidKey();
@@ -131,28 +170,14 @@ public class GameController {
             }
 
             boolean turnConsumed = processHeroMove(key);
+            if (turnConsumed) moveEnemiesRandomly();
 
-            if (turnConsumed) {
-                moveEnemiesRandomly();
-            }
-
-            if (!hero.isAlive()) {
-                view.displayDefeat();
-                gameRunning = false;
-                continue;
-            }
-
-            if (boss.wasDefeated()) {
-                view.displayVictory(hero);
-                gameRunning = false;
-                continue;
-            }
+            if (!hero.isAlive()) { view.displayDefeat(); gameRunning = false; continue; }
+            if (boss.wasDefeated()) { view.displayVictory(hero); gameRunning = false; continue; }
 
             view.displayMap(map);
         }
     }
-
-    //movement
 
     private boolean processHeroMove(char key) {
         int[] destination = hero.calculateDestination(key);
@@ -160,7 +185,8 @@ public class GameController {
         int destY = destination[1];
 
         if (!map.isInsideBounds(destX, destY)) {
-            view.displayBoundaryReached();
+            if (gui != null) gui.log("You cannot leave the map.");
+            else view.displayBoundaryReached();
             return false;
         }
 
@@ -169,12 +195,14 @@ public class GameController {
         if (targetCell == Map.Empty) {
             map.updatePosition(hero.getPositionX(), hero.getPositionY(), destX, destY, Hero.Symbol);
             hero.moveTo(destX, destY);
-            view.displayMoved(destX, destY);
+            if (gui != null) gui.log("Moved to (" + destX + "," + destY + ")");
+            else view.displayMoved(destX, destY);
             return true;
         }
 
         if (targetCell == Map.Wall) {
-            view.displayWallBlocked();
+            if (gui != null) gui.log("You cannot go through the wall.");
+            else view.displayWallBlocked();
             return false;
         }
 
@@ -184,13 +212,15 @@ public class GameController {
                 map.clearCell(destX, destY);
                 return false;
             }
-            view.displayChestRevealed(targetChest.getName());
+            if (gui != null) gui.log("It's a trap! The Chest was a mimic!");
+            else view.displayChestRevealed(targetChest.getName());
             boolean heroWon = runBattle(targetChest, false);
             if (heroWon && !targetChest.isAlive()) {
                 Key loot = targetChest.collectLoot();
                 if (loot != null) {
                     hero.addKey();
-                    view.displayKeyFound(loot.getName());
+                    if (gui != null) gui.log("You found a " + loot.getName() + "!");
+                    else view.displayKeyFound(loot.getName());
                 }
                 map.clearCell(targetChest.getPositionX(), targetChest.getPositionY());
                 moveHeroIntoCell(destX, destY);
@@ -201,11 +231,13 @@ public class GameController {
         if (targetCell == Map.DoorClosedSy) {
             if (door.tryOpen(hero)) {
                 map.placeSymbol(destX, destY, Map.DoorOpenSy);
-                view.displayDoorOpened();
+                if (gui != null) gui.log("You unlock the door with your key.");
+                else view.displayDoorOpened();
                 moveHeroIntoCell(destX, destY);
                 return true;
             } else {
-                view.displayDoorLocked();
+                if (gui != null) gui.log("The door is locked. You need a key.");
+                else view.displayDoorLocked();
                 return false;
             }
         }
@@ -217,10 +249,7 @@ public class GameController {
 
         if (targetCell == Enemy.Symbol) {
             Enemy targetEnemy = findEnemyAt(destX, destY);
-            if (targetEnemy == null) {
-                map.clearCell(destX, destY);
-                return false;
-            }
+            if (targetEnemy == null) { map.clearCell(destX, destY); return false; }
             boolean heroWon = runBattle(targetEnemy, false);
             if (heroWon && !targetEnemy.isAlive()) {
                 removeEnemyFromMap(targetEnemy);
@@ -249,78 +278,85 @@ public class GameController {
     private Enemy findEnemyAt(int x, int y) {
         for (Enemy enemy : enemies) {
             if (enemy != null && enemy.isAlive()
-                    && enemy.getPositionX() == x && enemy.getPositionY() == y) {
+                    && enemy.getPositionX() == x && enemy.getPositionY() == y)
                 return enemy;
-            }
         }
         return null;
     }
 
     private Chest findChestAt(int x, int y) {
         for (Chest chest : chests) {
-            if (chest != null && chest.getPositionX() == x && chest.getPositionY() == y) {
+            if (chest != null && chest.getPositionX() == x && chest.getPositionY() == y)
                 return chest;
-            }
         }
         return null;
     }
 
-    //remove defeated enemy
-
     private void removeEnemyFromMap(Enemy enemy) {
         map.clearCell(enemy.getPositionX(), enemy.getPositionY());
-        view.displayEnemyRemovedFromMap(enemy.getName());
+        if (gui != null) gui.log(enemy.getName() + " disappears from the map.");
+        else view.displayEnemyRemovedFromMap(enemy.getName());
     }
 
-    //run
-
     private boolean runBattle(Enemy enemy, boolean isBossFight) {
-        view.displayCombatStart(hero.getName(), enemy.getName(), isBossFight);
+        if (gui != null) gui.log("=== BATTLE: " + hero.getName() + " vs " + enemy.getName() + " ===");
+        else view.displayCombatStart(hero.getName(), enemy.getName(), isBossFight);
 
         boolean canRun = !isBossFight;
 
         while (hero.isAlive() && enemy.isAlive()) {
-            view.displayBattleMenu(hero, enemy.getName(), enemy.getHealth(), enemy.getMaxHealth(), canRun);
-
-            int choice = readMenuChoice();
-
-            //actions
-            //atk
+            int choice;
+            if (gui != null) {
+                choice = gui.showBattleMenu(
+                        hero.getName() + " HP: " + hero.getHealth() + "/" + hero.getMaxHealth(),
+                        enemy.getName() + " HP: " + enemy.getHealth() + "/" + enemy.getMaxHealth(),
+                        canRun);
+            } else {
+                view.displayBattleMenu(hero, enemy.getName(), enemy.getHealth(), enemy.getMaxHealth(), canRun);
+                choice = readMenuChoice();
+            }
 
             if (choice == 1) {
-
                 int damage = hero.performAttack(enemy);
-                view.displayAttackAction(hero.getName(), enemy.getName(), damage);
+                if (gui != null) gui.log(hero.getName() + " attacks " + enemy.getName() + " for " + damage + " damage!");
+                else view.displayAttackAction(hero.getName(), enemy.getName(), damage);
 
                 if (!enemy.isAlive()) {
-                    handleEnemyDefeatMessage(enemy, isBossFight);
+                    if (isBossFight) {
+                        if (gui != null) gui.log(enemy.getName() + " has been DEFEATED!");
+                        else view.displayBossDefeated(enemy.getName());
+                    } else {
+                        if (gui != null) gui.log(enemy.getName() + " has been defeated!");
+                        else view.displayEnemyDefeated(enemy.getName());
+                    }
                     return true;
                 }
 
-                //heal (infinite Healing Potion item, never consumed)
-
             } else if (choice == 2) {
                 hero.usePotion();
-                view.displayPotionUsed(hero);
-
-                //run
+                if (gui != null) gui.log(hero.getName() + " drinks a Healing Potion! HP: " + hero.getHealth() + "/" + hero.getMaxHealth());
+                else view.displayPotionUsed(hero);
 
             } else if (choice == 3) {
                 if (canRun) {
-                    view.displayRunAway();
+                    if (gui != null) gui.log("You run away from the battle.");
+                    else view.displayRunAway();
                     return false;
                 } else {
-                    view.displayCannotRunFromBoss();
+                    if (gui != null) gui.log("There is no escape from the Boss!");
+                    else view.displayCannotRunFromBoss();
                     continue;
                 }
             }
 
             if (enemy.isAlive()) {
                 int enemyDamage = enemy.performAttack(hero);
-                view.displayAttackAction(enemy.getName(), hero.getName(), enemyDamage);
+                if (gui != null) gui.log(enemy.getName() + " attacks " + hero.getName() + " for " + enemyDamage + " damage!");
+                else view.displayAttackAction(enemy.getName(), hero.getName(), enemyDamage);
 
                 if (!hero.isAlive()) {
-                    view.displayHeroFallen();
+                    if (gui != null) gui.log("The hero has fallen in battle...");
+                    else view.displayHeroFallen();
                     return false;
                 }
             }
@@ -328,49 +364,30 @@ public class GameController {
         return !enemy.isAlive();
     }
 
-    private void handleEnemyDefeatMessage(Enemy enemy, boolean isBossFight) {
-        if (isBossFight) {
-            view.displayBossDefeated(enemy.getName());
-        } else {
-            view.displayEnemyDefeated(enemy.getName());
-        }
-    }
-
-    //battle menu
     private int readMenuChoice() {
         while (true) {
             String input = scanner.nextLine().trim();
-            if (input.equals("1") || input.equals("2") || input.equals("3")) {
+            if (input.equals("1") || input.equals("2") || input.equals("3"))
                 return Integer.parseInt(input);
-            }
             view.displayInvalidChoice();
             System.out.print(" Choose an action: ");
         }
     }
 
-    //random movement enemy not boss
-
     private void moveEnemiesRandomly() {
         for (Enemy enemy : enemies) {
-            if (enemy == null || !enemy.isAlive()) {
-                continue;
-            }
+            if (enemy == null || !enemy.isAlive()) continue;
 
             char direction = enemy.getRandomMoveDirection();
-            if (direction == ' ') {
-                continue;
-            }
+            if (direction == ' ') continue;
 
             int[] step = computeStep(enemy.getPositionX(), enemy.getPositionY(), direction);
             int newX = step[0];
             int newY = step[1];
 
-            if (!map.isInsideBounds(newX, newY)) {
-                continue;
-            }
+            if (!map.isInsideBounds(newX, newY)) continue;
 
             char destinationCell = map.getCell(newX, newY);
-
             if (destinationCell == Map.Empty) {
                 map.updatePosition(enemy.getPositionX(), enemy.getPositionY(), newX, newY, Enemy.Symbol);
                 enemy.moveTo(newX, newY);
@@ -392,48 +409,46 @@ public class GameController {
     }
 
     private char toUpperCaseManual(char c) {
-        if (c >= 'a' && c <= 'z') {
-            return (char) (c - 32);
-        }
+        if (c >= 'a' && c <= 'z') return (char) (c - 32);
         return c;
-
     }
-    private void saveGame() { //estos son los metodos que correspoden al guardado y al de cargar partida
-        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("savegame.dat"))) {
 
+    private void saveGame() {
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("savegame.dat"))) {
             oos.writeObject(map);
             oos.writeObject(hero);
             oos.writeObject(boss);
             oos.writeObject(enemies);
             oos.writeObject(chests);
             oos.writeObject(door);
-
-            System.out.println("--- Game saved successfully! ---");
+            if (gui != null) gui.log("Game saved successfully!");
+            else System.out.println("--- Game saved successfully! ---");
         } catch (IOException e) {
-            System.out.println("Error saving the game: " + e.getMessage());
+            if (gui != null) gui.log("Error saving: " + e.getMessage());
+            else System.out.println("Error saving the game: " + e.getMessage());
         }
     }
 
     private boolean loadGame() {
         File saveFile = new File("savegame.dat");
         if (!saveFile.exists()) {
-            System.out.println("--- No saved game found. ---");
+            if (gui != null) gui.log("No saved game found.");
+            else System.out.println("--- No saved game found. ---");
             return false;
         }
-
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(saveFile))) {
-
-            this.map = (Map) ois.readObject();
-            this.hero = (Hero) ois.readObject();
-            this.boss = (Boss) ois.readObject();
+            this.map     = (Map)     ois.readObject();
+            this.hero    = (Hero)    ois.readObject();
+            this.boss    = (Boss)    ois.readObject();
             this.enemies = (Enemy[]) ois.readObject();
-            this.chests = (Chest[]) ois.readObject();
-            this.door = (Door) ois.readObject();
-
-            System.out.println("--- Game loaded successfully! ---");
+            this.chests  = (Chest[]) ois.readObject();
+            this.door    = (Door)    ois.readObject();
+            if (gui != null) gui.log("Game loaded successfully!");
+            else System.out.println("--- Game loaded successfully! ---");
             return true;
         } catch (IOException | ClassNotFoundException e) {
-            System.out.println("Error loading the game: " + e.getMessage());
+            if (gui != null) gui.log("Error loading: " + e.getMessage());
+            else System.out.println("Error loading the game: " + e.getMessage());
             return false;
         }
     }
