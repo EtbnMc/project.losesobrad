@@ -1,15 +1,7 @@
-package Controller;
-
-import Model.*; //llama a todo
+package Model;
 import View.GameView;
-import java.io.*; // esta funcion guardara la partida 
-import java.io.File;
-import java.io.ObjectOutputStream;
-import java.io.FileOutputStream;
-import java.io.ObjectInputStream;
-import java.io.FileInputStream;
-import java.io.IOException;
-
+import java.util.Scanner;
+import java.io.*;
 public class GameController {
 
     //map, entity location
