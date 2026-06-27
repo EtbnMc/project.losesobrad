@@ -69,7 +69,7 @@ public class GameView {
     }
 
     public void displayMovePrompt() {
-        System.out.print(" Move (W/A/S/D) or Q to quit: ");
+        System.out.print("  Move (W/A/S/D) | G = Save | C = Load | Q = Quit: "");
     }
 
     public void displayInvalidKey() {
