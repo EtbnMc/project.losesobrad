@@ -1,10 +1,17 @@
 package View;
 
-import Model.Boss;
-import Model.Hero;
-import Model.Map;
+import Model.*;
 
 public class GameView {
+
+    private static final String YELLOW= "\033[33m";
+    private static final String PURPLE   = "\033[35m";
+    private static final String GRAY     = "\033[90m";
+    private static final String GREEN    = "\033[32m";
+    private static final String RED     = "\033[31m";
+    private static final String CYAN     = "\033[36m";
+    private static final String BROWN = "\033[38;5;130m";
+    private static final String RESET    = "\033[0m";
 
     //aesthetic
 
@@ -15,14 +22,39 @@ public class GameView {
         char[][] grid = map.getGrid();
         for (int i = 0; i < map.getRows(); i++) {
             System.out.print("  | ");
+
             for (int j = 0; j < map.getColumns(); j++) {
-                System.out.print(grid[i][j] + " ");
+
+                char c = grid[i][j];
+
+                if (c == Map.HeroSy) {
+                    System.out.print(CYAN + c + RESET + " ");
+
+                } else if (c == Map.EnemySy) {
+                    System.out.print(GREEN + c + RESET + " ");
+
+                } else if (c == Map.BossSy) {
+                    System.out.print(PURPLE + c + RESET + " ");
+
+                } else if (c == Map.Wall) {
+                    System.out.print(GRAY + c + RESET + " ");
+
+                } else if (c == Map.DoorClosedSy || c == Map.DoorOpenSy) {
+                    System.out.print(BROWN + c + RESET + " ");
+
+                } else if (c == Chest.Symbol) {
+                    System.out.print(YELLOW + c + RESET + " ");
+
+                } else {
+                    System.out.print(c + " ");
+                }
             }
+
             System.out.println("|");
         }
 
         printHorizontalBorder(map.getColumns());
-        System.out.println("  Legend:  H = Hero   E = Enemy   B = Boss   C = Chest   D = Door");
+        System.out.println("  Legend: " + CYAN + " H = Hero " +GREEN+ "  E = Enemy "+PURPLE+" B = Boss "+YELLOW+" C = Chest "+BROWN+"  D = Door" + RESET);
     }
 
     private void printHorizontalBorder(int columns) {
@@ -99,7 +131,7 @@ public class GameView {
     public void displayDefeat() {
         System.out.println();
         System.out.println("+================================================+");
-        System.out.println("|                  *** DEFEAT ***                |");
+        System.out.println("|       "+RED+"           *** DEFEAT ***       "+ RESET +"          |");
         System.out.println("+================================================+");
         System.out.println("|  GAME OVER                                     |");
         System.out.println("|  Stay determined...                            |");
