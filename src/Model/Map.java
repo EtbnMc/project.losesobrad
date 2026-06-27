@@ -5,6 +5,7 @@ public class Map {
     public static final char HeroSy = Hero.Symbol;
     public static final char EnemySy = Enemy.Symbol;
     public static final char BossSy = Boss.Symbol;
+    public static final char Wall = '—';
 
     private final char[][] grid;
     private final int rows;
