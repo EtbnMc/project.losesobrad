@@ -130,17 +130,17 @@ public class GameController {
 
     //movement
 
-    private boolean processHeroMove(char key) {
-        int[] destination = hero.calculateDestination(key);
-        int destX = destination[0];
-        int destY = destination[1];
+   private boolean processHeroMove(char key) {
+    int[] destination = hero.calculateDestination(key);
+    int destX = destination[0];
+    int destY = destination[1];
 
-        if (!map.isInsideBounds(destX, destY)) {
-            view.displayBoundaryReached();
-            return false;
-        }
+    if (!map.isInsideBounds(destX, destY)) {
+        view.displayBoundaryReached();
+        return false;
+    }
 
-        char targetCell = map.getCell(destX, destY);
+    char targetCell = map.getCell(destX, destY);
 
     if (targetCell == Map.Empty) {
         map.updatePosition(hero.getPositionX(), hero.getPositionY(), destX, destY, Hero.Symbol);
@@ -149,48 +149,36 @@ public class GameController {
         return true;
     }
 
-
     if (targetCell == Map.Wall) {
         System.out.println("You cannot go through the wall");
         return false;
     }
 
     if (targetCell == Enemy.Symbol) {
-        
+        Enemy targetEnemy = findEnemyAt(destX, destY);
+        if (targetEnemy == null) {
+            map.clearCell(destX, destY);
+            return false;
+        }
+        boolean heroWon = runBattle(targetEnemy, false);
+        if (heroWon && !targetEnemy.isAlive()) {
+            removeEnemyFromMap(targetEnemy);
+            moveHeroIntoCell(destX, destY);
+        }
+        return true;
     }
 
     if (targetCell == Boss.Symbol) {
-        
+        runBattle(boss, true);
+        if (boss.wasDefeated()) {
+            map.clearCell(boss.getPositionX(), boss.getPositionY());
+            moveHeroIntoCell(destX, destY);
+        }
+        return true;
     }
 
     return false;
 }
-
-        if (targetCell == Enemy.Symbol) {
-            Enemy targetEnemy = findEnemyAt(destX, destY);
-            if (targetEnemy == null) {
-                map.clearCell(destX, destY);
-                return false;
-            }
-            boolean heroWon = runBattle(targetEnemy, false);
-            if (heroWon && !targetEnemy.isAlive()) {
-                removeEnemyFromMap(targetEnemy);
-                moveHeroIntoCell(destX, destY);
-            }
-            return true;
-        }
-
-        if (targetCell == Boss.Symbol) {
-            runBattle(boss, true);
-            if (boss.wasDefeated()) {
-                map.clearCell(boss.getPositionX(), boss.getPositionY());
-                moveHeroIntoCell(destX, destY);
-            }
-            return true;
-        }
-
-        return false;
-    }
 
     private void moveHeroIntoCell(int x, int y) {
         map.updatePosition(hero.getPositionX(), hero.getPositionY(), x, y, Hero.Symbol);
