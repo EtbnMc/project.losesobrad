@@ -1,6 +1,7 @@
 package Model;
-
-public class Region {
+import java.io.Serializable;
+public class Region implements Serializable {
+    private static final long serialVersionUID = 1L;
     private final String name;
     private final Map map;
     private final Enemy[] enemies;
