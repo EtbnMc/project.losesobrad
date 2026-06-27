@@ -2,7 +2,7 @@ package Controller;
 
 import Model.*; //llama a todo
 import View.GameView;
-import java.util.Scanner;
+import java.io.*; // esta funcion guardara la partida 
 
 public class GameController {
 
@@ -88,6 +88,20 @@ public class GameController {
                 view.displayQuitMessage();
                 break;
             }
+            
+            if (key == 'G') {
+                saveGame();
+                continue;
+            }
+
+            
+            if (key == 'C') {
+                if (loadGame()) {
+                    view.displayMap(map); 
+                }
+                continue; 
+            }
+            // la tecla g es para guardar el juego y la c es para cargar el juego que el usuario guardo
 
             if (key != 'W' && key != 'A' && key != 'S' && key != 'D') {
                 view.displayInvalidKey();
@@ -330,5 +344,41 @@ public class GameController {
             return (char) (c - 32);
         }
         return c;
+    }
+}
+private void saveGame() {
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("savegame.dat"))) {
+            
+            oos.writeObject(map);
+            oos.writeObject(hero);
+            oos.writeObject(boss);
+            oos.writeObject(enemies);
+            
+            System.out.println("--- Game saved successfully! ---");
+        } catch (IOException e) {
+            System.out.println("Error saving the game: " + e.getMessage());
+        }
+    }
+
+    private boolean loadGame() {
+        File saveFile = new File("savegame.dat");
+        if (!saveFile.exists()) {
+            System.out.println("--- No saved game found. ---");
+            return false;
+        }
+
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(saveFile))) {
+            
+            this.map = (Map) ois.readObject();
+            this.hero = (Hero) ois.readObject();
+            this.boss = (Boss) ois.readObject();
+            this.enemies = (Enemy[]) ois.readObject();
+            
+            System.out.println("--- Game loaded successfully! ---");
+            return true;
+        } catch (IOException | ClassNotFoundException e) {
+            System.out.println("Error loading the game: " + e.getMessage());
+            return false;
+        }
     }
 }
