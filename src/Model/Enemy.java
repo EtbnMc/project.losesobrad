@@ -1,7 +1,9 @@
 package Model;
+import java.io.Serializable;
 import java.util.Random;
 
-public class Enemy extends GameCharacter {
+public class Enemy extends GameCharacter implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     public static final char Symbol = 'E';
 
