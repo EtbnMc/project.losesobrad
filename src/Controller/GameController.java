@@ -53,6 +53,7 @@ public class GameController {
         region.spawnEnemy("Piglin",5, 13);
         region.spawnEnemy("Ghast",9, 1);
 
+        //lugar paredes x:fila, y:columna
         map.Wall(1, 1);
         map.Wall(1, 2);
         map.Wall(1, 3);
