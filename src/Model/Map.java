@@ -8,6 +8,9 @@ public class Map implements Serializable {
     public static final char EnemySy = Enemy.Symbol;
     public static final char BossSy = Boss.Symbol;
     public static final char Wall = '#';
+    public static final char DoorClosedSy = Door.Symbol;
+    public static final char DoorOpenSy = Door.OpenSymbol;
+    public static final char KeySy = Key.Symbol;
 
     private final char[][] grid;
     private final int rows;

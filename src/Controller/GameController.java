@@ -16,6 +16,8 @@ public class GameController {
     private Hero hero;
     private Boss boss;
     private Enemy[] enemies;
+    private Chest[] chests;
+    private Door door;
 
     public GameController() {
         this.scanner = new Scanner(System.in);
@@ -68,10 +70,26 @@ public class GameController {
         map.Wall(8, 13);
         map.Wall(8, 14);
 
+        //boss room: sealed box in the bottom-right corner, rows 10-14, columns 10-14
+        //the only way in is the single Door cell, every other border cell is a wall
+        for (int col = 10; col <= 14; col++) {
+            map.Wall(10, col);
+        }
+        for (int row = 10; row <= 14; row++) {
+            map.Wall(row, 10);
+        }
+        //(10,12) is left open for the Door, carved out right after the loops below
 
         enemies = region.getEnemies();
 
-        boss = region.spawnBoss("Enderdragon", 14, 14);
+        region.spawnChest("Mimic Chest", 1, 13);
+        chests = region.getChests();
+
+        //door is the only entrance to the boss room
+        door = new Door(10, 12);
+        map.placeSymbol(10, 12, Map.DoorClosedSy);
+
+        boss = region.spawnBoss("Enderdragon", 13, 13);
     }
 
     private void runMainLoop() {
@@ -156,8 +174,45 @@ public class GameController {
         }
 
         if (targetCell == Map.Wall) {
-            System.out.println("You cannot go through the wall");
+            view.displayWallBlocked();
             return false;
+        }
+
+        if (targetCell == Chest.Symbol) {
+            Chest targetChest = findChestAt(destX, destY);
+            if (targetChest == null || targetChest.isLooted()) {
+                map.clearCell(destX, destY);
+                return false;
+            }
+            view.displayChestRevealed(targetChest.getName());
+            boolean heroWon = runBattle(targetChest, false);
+            if (heroWon && !targetChest.isAlive()) {
+                Key loot = targetChest.collectLoot();
+                if (loot != null) {
+                    hero.addKey();
+                    view.displayKeyFound(loot.getName());
+                }
+                map.clearCell(targetChest.getPositionX(), targetChest.getPositionY());
+                moveHeroIntoCell(destX, destY);
+            }
+            return true;
+        }
+
+        if (targetCell == Map.DoorClosedSy) {
+            if (door.tryOpen(hero)) {
+                map.placeSymbol(destX, destY, Map.DoorOpenSy);
+                view.displayDoorOpened();
+                moveHeroIntoCell(destX, destY);
+                return true;
+            } else {
+                view.displayDoorLocked();
+                return false;
+            }
+        }
+
+        if (targetCell == Map.DoorOpenSy) {
+            moveHeroIntoCell(destX, destY);
+            return true;
         }
 
         if (targetCell == Enemy.Symbol) {
@@ -201,6 +256,15 @@ public class GameController {
         return null;
     }
 
+    private Chest findChestAt(int x, int y) {
+        for (Chest chest : chests) {
+            if (chest != null && chest.getPositionX() == x && chest.getPositionY() == y) {
+                return chest;
+            }
+        }
+        return null;
+    }
+
     //remove defeated enemy
 
     private void removeEnemyFromMap(Enemy enemy) {
@@ -233,11 +297,11 @@ public class GameController {
                     return true;
                 }
 
-                //heal
+                //heal (infinite Healing Potion item, never consumed)
 
             } else if (choice == 2) {
-                hero.healFully();
-                view.displayHealAction(hero);
+                hero.usePotion();
+                view.displayPotionUsed(hero);
 
                 //run
 
@@ -283,21 +347,6 @@ public class GameController {
             System.out.print(" Choose an action: ");
         }
     }
-
-    /*sin comentario  y se pone en view
-
-    private int readMenuChoice() {
-    while (true) {
-        String input = scanner.nextLine().trim();
-        if (input.equals("1") || input.equals("2") || input.equals("3")) {
-            return Integer.parseInt(input);
-        }
-        view.displayInvalidChoice();
-        view.displayChooseAction();
-    }
-}
-    */
-
 
     //random movement enemy not boss
 
@@ -356,6 +405,8 @@ public class GameController {
             oos.writeObject(hero);
             oos.writeObject(boss);
             oos.writeObject(enemies);
+            oos.writeObject(chests);
+            oos.writeObject(door);
 
             System.out.println("--- Game saved successfully! ---");
         } catch (IOException e) {
@@ -376,6 +427,8 @@ public class GameController {
             this.hero = (Hero) ois.readObject();
             this.boss = (Boss) ois.readObject();
             this.enemies = (Enemy[]) ois.readObject();
+            this.chests = (Chest[]) ois.readObject();
+            this.door = (Door) ois.readObject();
 
             System.out.println("--- Game loaded successfully! ---");
             return true;

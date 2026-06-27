@@ -1,7 +1,7 @@
 package Model;
 import java.io.Serializable;
 public class GameCharacter implements Serializable  {
-     private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     private String name;
     private int health;
@@ -46,6 +46,10 @@ public class GameCharacter implements Serializable  {
         this.health = this.maxHealth;
     }
 
+    public void heal(int amount) {
+        this.health = Math.min(this.maxHealth, this.health + amount);
+    }
+
     public boolean isAlive() {
         return this.health > 0;
     }
@@ -64,3 +68,4 @@ public class GameCharacter implements Serializable  {
         return name + " [HP: " + health + "/" + maxHealth + " | ATK: " + attack + " | Pos: (" + positionX + "," + positionY + ")]";
     }
 }
+

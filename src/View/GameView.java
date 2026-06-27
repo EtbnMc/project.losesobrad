@@ -22,8 +22,7 @@ public class GameView {
         }
 
         printHorizontalBorder(map.getColumns());
-        System.out.println("  Legend:  H = Hero   E = Enemy   B = Boss");
-        System.out.println();
+        System.out.println("  Legend:  H = Hero   E = Enemy   B = Boss   C = Chest   D = Door");
     }
 
     private void printHorizontalBorder(int columns) {
@@ -51,6 +50,10 @@ public class GameView {
 
     public void displayBoundaryReached() {
         System.out.println("  You cannot leave the map ");
+    }
+
+    public void displayWallBlocked() {
+        System.out.println("  You cannot go through the wall.");
     }
 
     public void displayCellBlocked() {
@@ -112,13 +115,34 @@ public class GameView {
         System.out.println(" " + enemyName + " HP: " + enemyHealth + "/" + enemyMaxHealth);
         System.out.println("-------------------");
         System.out.println(" 1. Attack");
-        System.out.println(" 2. Full Heal");
+        System.out.println(" 2. Use Healing Potion");
         if (canRun) {
             System.out.println(" 3. Run ");
         } else {
             System.out.println(" 3. Run  (unavailable against the Boss)");
         }
         System.out.print(" Choose an action: ");
+    }
+
+    public void displayChestRevealed(String chestName) {
+        System.out.println("  It's a trap! " + "The Chest " + " was a mimic!");
+    }
+
+    public void displayKeyFound(String keyName) {
+        System.out.println("  You found a " + keyName + "!");
+    }
+
+    public void displayDoorOpened() {
+        System.out.println("  You unlock the door with your key.");
+    }
+
+    public void displayDoorLocked() {
+        System.out.println("  The door is locked. You need a key.");
+    }
+
+    public void displayPotionUsed(Hero hero) {
+        System.out.println("  " + hero.getName() + " drinks a Healing Potion and restores HP! ("
+                + hero.getHealth() + "/" + hero.getMaxHealth() + ")");
     }
 
     public void displayInvalidChoice() {
@@ -145,8 +169,7 @@ public class GameView {
     }
 
     public void displayHealAction(Hero hero) {
-        System.out.println("  " + hero.getName() + " uses Full Heal and restores all HP! ("
-                + hero.getHealth() + "/" + hero.getMaxHealth() + ")");
+        System.out.println("  " + hero.getName() + " uses Full Heal and restores all HP! (" + hero.getHealth() + "/" + hero.getMaxHealth() + ")");
     }
 
     public void displayRunAway() {
