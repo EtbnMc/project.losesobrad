@@ -142,18 +142,29 @@ public class GameController {
 
         char targetCell = map.getCell(destX, destY);
 
-        if (targetCell == Map.Empty) {
-            map.updatePosition(hero.getPositionX(), hero.getPositionY(), destX, destY, Hero.Symbol);
-            hero.moveTo(destX, destY);
-            view.displayMoved(destX, destY);
-            return true;
-        }
+    if (targetCell == Map.Empty) {
+        map.updatePosition(hero.getPositionX(), hero.getPositionY(), destX, destY, Hero.Symbol);
+        hero.moveTo(destX, destY);
+        view.displayMoved(destX, destY);
+        return true;
+    }
 
-        targetCell = map.getCell(destX, destY);
-        if (targetCell == Map.Wall){
-            System.out.println("You cannot go through the wall");
-            return false;
-        }
+
+    if (targetCell == Map.Wall) {
+        System.out.println("You cannot go through the wall");
+        return false;
+    }
+
+    if (targetCell == Enemy.Symbol) {
+        
+    }
+
+    if (targetCell == Boss.Symbol) {
+        
+    }
+
+    return false;
+}
 
         if (targetCell == Enemy.Symbol) {
             Enemy targetEnemy = findEnemyAt(destX, destY);
