@@ -53,6 +53,17 @@ public class GameController {
         region.spawnEnemy("Piglin",5, 13);
         region.spawnEnemy("Ghast",9, 1);
 
+        map.Wall(1, 1);
+        map.Wall(1, 2);
+        map.Wall(1, 3);
+        map.Wall(2, 3);
+        map.Wall(3, 3);
+        map.Wall(4, 3);
+        map.Wall(7, 7);
+        map.Wall(7, 8);
+        map.Wall(7, 9);
+        map.Wall(8, 9);
+        map.Wall(9, 9);
         enemies = region.getEnemies();
 
         boss = region.spawnBoss("Enderdragon", 14, 14);
@@ -123,6 +134,12 @@ public class GameController {
             hero.moveTo(destX, destY);
             view.displayMoved(destX, destY);
             return true;
+        }
+
+        targetCell = map.getCell(destX, destY);
+        if (targetCell == Map.Wall){
+            System.out.println("You cannot go through the wall");
+            return false;
         }
 
         if (targetCell == Enemy.Symbol) {

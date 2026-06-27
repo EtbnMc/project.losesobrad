@@ -45,6 +45,12 @@ public class Map {
         return Empty;
     }
 
+    public void Wall(int x, int y) {
+        if (isInsideBounds(x, y)) {
+            grid[x][y] = Wall;
+        }
+    }
+
     public void updatePosition(int fromX, int fromY, int toX, int toY, char symbol) {
         clearCell(fromX, fromY);
         placeSymbol(toX, toY, symbol);
