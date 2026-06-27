@@ -267,6 +267,21 @@ public class GameController {
         }
     }
 
+    /*sin comentario  y se pone en view
+    
+    private int readMenuChoice() {
+    while (true) {
+        String input = scanner.nextLine().trim();
+        if (input.equals("1") || input.equals("2") || input.equals("3")) {
+            return Integer.parseInt(input);
+        }
+        view.displayInvalidChoice();
+        view.displayChooseAction();
+    }
+}
+    */
+    
+    
     //random movement enemy not boss
 
     private void moveEnemiesRandomly() {
