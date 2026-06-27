@@ -22,7 +22,7 @@ public class GameView {
         }
 
         printHorizontalBorder(map.getColumns());
-        System.out.println("  Legend:  H = Hero   E = Enemy   B = Boss   C = Chest   D = Door");
+        System.out.println(" H = Hero   E = Enemy   B = Boss   C = Chest   D = Door");
     }
 
     private void printHorizontalBorder(int columns) {
