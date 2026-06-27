@@ -1,5 +1,7 @@
 package Model;
-public class Map {
+import java.io.Serializable;
+public class Map implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     public static final char Empty = '.';
     public static final char HeroSy = Hero.Symbol;
