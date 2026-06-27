@@ -1,5 +1,5 @@
 package Model;
-import java.io.Serializable;
+import java.io.Serializable; //save
 public class Boss extends Enemy implements Serializable {
 private static final long serialVersionUID = 1L;
     public static final char Symbol = 'B';
