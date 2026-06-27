@@ -1,4 +1,4 @@
-package Model;
+package Controller;
 import View.GameView;
 import java.util.Scanner;
 import java.io.*;
