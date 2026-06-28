@@ -41,7 +41,7 @@ public class GameController {
         setupWorld();
         gui.refreshMap();
         gui.updateHeroStatus("HERO — HP: " + hero.getHealth() + "/" + hero.getMaxHealth());
-        gui.log("Welcome to MINECRAFT by |LosEsoBrad Inc| Use (W/S/A/D) to move. Defeat the Enderdragon and free the End to win ");
+        gui.log("Welcome to MINECRAFT by |LosEsoBrad Inc| Use (W/S/A/D) to move around the map and defeat the Enderdragon and free the End to win ");
     }
 
 
@@ -79,12 +79,12 @@ public class GameController {
         gui.updateHeroStatus("HERO — HP: " + hero.getHealth() + "/" + hero.getMaxHealth());
 
         if (!hero.isAlive()) {
-            gui.showMessage("DEFEAT", "GAME OVER Stay determined... ");
+            gui.showMessage("defear", "Game over, try again :c ");
             System.exit(0);
         }
 
         if (boss.wasDefeated()) {
-            gui.showMessage("VICTORY", hero.getName() + " has freed The End  tnks 4 playing our game <3");
+            gui.showMessage("Victory", hero.getName() + " has freed The End  tnks 4 playing our game <3");
             System.exit(0);
         }
     }
@@ -238,7 +238,7 @@ public class GameController {
                 map.clearCell(destX, destY);
                 return false;
             }
-            if (gui != null) gui.log("It's a trap, The Chest was a mimic ");
+            if (gui != null) gui.log("It's a trap, The Chest was a mimic D: ");
             else view.displayChestRevealed(targetChest.getName());
             boolean heroWon = runBattle(targetChest, false);
             if (heroWon && !targetChest.isAlive()) {
@@ -349,7 +349,7 @@ public class GameController {
 
                 if (!enemy.isAlive()) {
                     if (isBossFight) {
-                        if (gui != null) gui.log(enemy.getName() + " has been DEFEATED");
+                        if (gui != null) gui.log(enemy.getName() + " has been defeated :D");
                         else view.displayBossDefeated(enemy.getName());
                     } else {
                         if (gui != null) gui.log(enemy.getName() + " has been defeated");
@@ -360,7 +360,7 @@ public class GameController {
 
             } else if (choice == 2) {
                 hero.usePotion();
-                if (gui != null) gui.log(hero.getName() + " drinks a Healing Potion HP: " + hero.getHealth() + "/" + hero.getMaxHealth());
+                if (gui != null) gui.log(hero.getName() + " drinks a Healing Potion HP " + hero.getHealth() + "/" + hero.getMaxHealth());
                 else view.displayPotionUsed(hero);
 
             } else if (choice == 3) {
@@ -447,8 +447,8 @@ public class GameController {
             oos.writeObject(enemies);
             oos.writeObject(chests);
             oos.writeObject(door);
-            if (gui != null) gui.log("Game saved successfully!");
-            else System.out.println("--- Game saved successfully! ---");
+            if (gui != null) gui.log("Game saved successfully, u can keep playing :3");
+            else System.out.println(" Game saved successfully ");
         }
         catch (IOException e) {
             if (gui != null) gui.log("Error saving: " + e.getMessage());
@@ -460,7 +460,7 @@ public class GameController {
         File saveFile = new File("savegame.dat");
         if (!saveFile.exists()) {
             if (gui != null) gui.log("No saved game found");
-            else System.out.println("--- No saved game found. ---");
+            else System.out.println("No saved game found :c ");
             return false;
         }
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(saveFile))) {
@@ -471,7 +471,7 @@ public class GameController {
             this.chests = (Chest[]) ois.readObject();
             this.door = (Door) ois.readObject();
             if (gui != null) gui.log("Game loaded successfully");
-            else System.out.println("--- Game loaded successfully!  ");
+            else System.out.println("Game loaded successfully ");
             return true;
         } catch (IOException | ClassNotFoundException e) {
             if (gui != null) gui.log("Error loading: " + e.getMessage());
