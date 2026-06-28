@@ -41,7 +41,7 @@ public class GameController {
         setupWorld();
         gui.refreshMap();
         gui.updateHeroStatus("HERO — HP: " + hero.getHealth() + "/" + hero.getMaxHealth());
-        gui.log("Welcome! Use WASD to move. Defeat the Enderdragon to win!");
+        gui.log("Welcome to MINECRAFT 2 Use WASD to move. Defeat the Enderdragon to win ");
     }
 
 
