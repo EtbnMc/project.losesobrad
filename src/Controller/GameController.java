@@ -41,7 +41,7 @@ public class GameController {
         setupWorld();
         gui.refreshMap();
         gui.updateHeroStatus("HERO — HP: " + hero.getHealth() + "/" + hero.getMaxHealth());
-        gui.log("Welcome to MINECRAFT 2 Use WASD to move. Defeat the Enderdragon to win ");
+        gui.log("Welcome to MINECRAFT by los esobrad Use WASD to move. Defeat the Enderdragon to win ");
     }
 
 
@@ -129,6 +129,23 @@ public class GameController {
         map.Wall(8, 12);
         map.Wall(8, 13);
         map.Wall(8, 14);
+        map.Wall(0, 5);
+        map.Wall(1, 5);
+        map.Wall(2, 5);
+        map.Wall(3, 5);
+        map.Wall(5, 0);
+        map.Wall(5, 1);
+        map.Wall(5, 2);
+        map.Wall(6, 10);
+        map.Wall(6, 11);
+        map.Wall(6, 12);
+        map.Wall(7, 12);
+        map.Wall(3, 7);
+        map.Wall(3, 8);
+        map.Wall(3, 9);
+        map.Wall(4, 9);
+        map.Wall(5, 9);
+        
 
         for (int col = 10; col <= 14; col++) {
             map.Wall(10, col);
