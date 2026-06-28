@@ -143,7 +143,7 @@ public class GameView {
 
     public void displayBattleMenu(Hero hero, String enemyName, int enemyHealth, int enemyMaxHealth, boolean canRun) {
         System.out.println();
-        System.out.println("=== BATTLE MENU ===");
+        System.out.println("=== Battle menu ===");
         System.out.println(" " + hero.getName() + " HP: " + hero.getHealth() + "/" + hero.getMaxHealth());
         System.out.println(" " + enemyName + " HP: " + enemyHealth + "/" + enemyMaxHealth);
         System.out.println("-------------------");
@@ -158,23 +158,23 @@ public class GameView {
     }
 
     public void displayChestRevealed(String chestName) {
-        System.out.println("  It's a trap! " + "The Chest " + " was a mimic!");
+        System.out.println("  It's a trap " + "The Chest " + " was a mimic D:");
     }
 
     public void displayKeyFound(String keyName) {
-        System.out.println("  You found a " + keyName + "!");
+        System.out.println("  You found a " + keyName );
     }
 
     public void displayDoorOpened() {
-        System.out.println("  You unlock the door with your key.");
+        System.out.println("  You unlock the door with your key ");
     }
 
     public void displayDoorLocked() {
-        System.out.println("  The door is locked. You need a key.");
+        System.out.println("  The door is locked. You need a key ");
     }
 
     public void displayPotionUsed(Hero hero) {
-        System.out.println("  " + hero.getName() + " drinks a Healing Potion and restores HP! ("
+        System.out.println("  " + hero.getName() + " drinks a Healing Potion and restores HP ("
                 + hero.getHealth() + "/" + hero.getMaxHealth() + ")");
     }
 
@@ -186,11 +186,11 @@ public class GameView {
         System.out.println();
         if (isBossFight) {
             System.out.println("+================================================+");
-            System.out.println("|   FINAL BATTLE: " + heroName + " vs " + enemyName);
+            System.out.println("|   Final battle: " + heroName + " vs " + enemyName);
             System.out.println("+================================================+");
         } else {
             System.out.println("+------------------------------------------------+");
-            System.out.println("|   BATTLE: " + heroName + " vs " + enemyName);
+            System.out.println("|   Battle: " + heroName + " vs " + enemyName);
             System.out.println("+------------------------------------------------+");
         }
     }
@@ -198,11 +198,11 @@ public class GameView {
     //battle actions (view)
 
     public void displayAttackAction(String attackerName, String targetName, int damage) {
-        System.out.println("  " + attackerName + " attacks " + targetName + " for " + damage + " damage!");
+        System.out.println("  " + attackerName + " attacks " + targetName + " for " + damage + " damage");
     }
 
     public void displayHealAction(Hero hero) {
-        System.out.println("  " + hero.getName() + " uses Full Heal and restores all HP! (" + hero.getHealth() + "/" + hero.getMaxHealth() + ")");
+        System.out.println("  " + hero.getName() + " uses Full Heal and restores all HP (" + hero.getHealth() + "/" + hero.getMaxHealth() + ")");
     }
 
     public void displayRunAway() {
@@ -210,25 +210,25 @@ public class GameView {
     }
 
     public void displayCannotRunFromBoss() {
-        System.out.println("  There is no escape from the Boss! You must fight.");
+        System.out.println("  There is no escape from the Boss, You must fight.");
     }
 
     public void displayEnemyDefeated(String enemyName) {
-        System.out.println("  " + enemyName + " has been defeated!");
+        System.out.println("  " + enemyName + " has been defeated congrats :33");
     }
 
     public void displayBossDefeated(String bossName) {
-        System.out.println("  " + bossName + " has been DEFEATED");
+        System.out.println("  " + bossName + " has been defeated congrats winner :DD");
     }
 
     //death/kills
 
     public void displayHeroFallen() {
-        System.out.println("  The hero has fallen in battle...");
+        System.out.println("  The hero has fallen in battle");
     }
 
     public void displayEnemyRemovedFromMap(String enemyName) {
-        System.out.println("  " + enemyName + " disappears from the map.");
+        System.out.println("  " + enemyName + " disappears from the map ");
     }
 
     private String padRight(String text, int width) {
