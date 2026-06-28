@@ -41,7 +41,7 @@ public class GameController {
         setupWorld();
         gui.refreshMap();
         gui.updateHeroStatus("HERO — HP: " + hero.getHealth() + "/" + hero.getMaxHealth());
-        gui.log("Welcome to MINECRAFT by los esobrad Use WASD to move. Defeat the Enderdragon to win ");
+        gui.log("Welcome to MINECRAFT by |LosEsoBrad Inc| Use (W/S/A/D) to move. Defeat the Enderdragon and free the End to win ");
     }
 
 
@@ -49,7 +49,7 @@ public class GameController {
         key = toUpperCaseManual(key);
 
         if (key == 'Q') {
-            gui.showMessage("Goodbye", "Thanks for playing our game");
+            gui.showMessage("Goodbye", "Tnks 4 playing our game <3");
             System.exit(0);
         }
 
@@ -79,12 +79,12 @@ public class GameController {
         gui.updateHeroStatus("HERO — HP: " + hero.getHealth() + "/" + hero.getMaxHealth());
 
         if (!hero.isAlive()) {
-            gui.showMessage("DEFEAT", "GAME OVER\nStay determined ");
+            gui.showMessage("DEFEAT", "GAME OVER Stay determined... ");
             System.exit(0);
         }
 
         if (boss.wasDefeated()) {
-            gui.showMessage("VICTORY", hero.getName() + " has freed The End \nHP: " + hero.getHealth() + "/" + hero.getMaxHealth());
+            gui.showMessage("VICTORY", hero.getName() + " has freed The End  tnks 4 playing our game <3");
             System.exit(0);
         }
     }
@@ -136,15 +136,19 @@ public class GameController {
         map.Wall(5, 0);
         map.Wall(5, 1);
         map.Wall(5, 2);
-        map.Wall(6, 10);
-        map.Wall(6, 11);
-        map.Wall(6, 12);
-        map.Wall(7, 12);
         map.Wall(3, 7);
         map.Wall(3, 8);
         map.Wall(3, 9);
         map.Wall(4, 9);
         map.Wall(5, 9);
+        map.Wall(12,0);
+        map.Wall(12,1);
+        map.Wall(12,2);
+        map.Wall(12,3);
+        map.Wall(12,4);
+        map.Wall(12,5);
+        map.Wall(13,5);
+        map.Wall(13,6);
         
 
         for (int col = 10; col <= 14; col++) {
@@ -177,9 +181,12 @@ public class GameController {
 
             char key = toUpperCaseManual(input.charAt(0));
 
-            if (key == 'Q') { view.displayQuitMessage(); break; }
-            if (key == 'G') { saveGame(); continue; }
-            if (key == 'C') { if (loadGame()) view.displayMap(map); continue; }
+            if (key == 'Q') { view.displayQuitMessage(); break;
+            }
+            if (key == 'G') { saveGame(); continue;
+            }
+            if (key == 'C') { if (loadGame()) view.displayMap(map); continue;
+            }
 
             if (key != 'W' && key != 'A' && key != 'S' && key != 'D') {
                 view.displayInvalidKey();
@@ -189,8 +196,10 @@ public class GameController {
             boolean turnConsumed = processHeroMove(key);
             if (turnConsumed) moveEnemiesRandomly();
 
-            if (!hero.isAlive()) { view.displayDefeat(); gameRunning = false; continue; }
-            if (boss.wasDefeated()) { view.displayVictory(hero); gameRunning = false; continue; }
+            if (!hero.isAlive()) { view.displayDefeat(); gameRunning = false; continue;
+            }
+            if (boss.wasDefeated()) { view.displayVictory(hero); gameRunning = false; continue;
+            }
 
             view.displayMap(map);
         }
@@ -440,7 +449,8 @@ public class GameController {
             oos.writeObject(door);
             if (gui != null) gui.log("Game saved successfully!");
             else System.out.println("--- Game saved successfully! ---");
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             if (gui != null) gui.log("Error saving: " + e.getMessage());
             else System.out.println("Error saving the game: " + e.getMessage());
         }
@@ -454,12 +464,12 @@ public class GameController {
             return false;
         }
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(saveFile))) {
-            this.map     = (Map)     ois.readObject();
-            this.hero    = (Hero)    ois.readObject();
-            this.boss    = (Boss)    ois.readObject();
+            this.map = (Map) ois.readObject();
+            this.hero = (Hero) ois.readObject();
+            this.boss = (Boss) ois.readObject();
             this.enemies = (Enemy[]) ois.readObject();
-            this.chests  = (Chest[]) ois.readObject();
-            this.door    = (Door)    ois.readObject();
+            this.chests = (Chest[]) ois.readObject();
+            this.door = (Door) ois.readObject();
             if (gui != null) gui.log("Game loaded successfully");
             else System.out.println("--- Game loaded successfully!  ");
             return true;

@@ -181,13 +181,22 @@ public class GameGUI extends JFrame {
                 char cell = grid[i][j];
 
                 Color bg;
-                if      (cell == 'H')       bg = COLOR_HERO;
-                else if (cell == 'E')       bg = COLOR_ENEMY;
-                else if (cell == 'B')       bg = COLOR_BOSS;
-                else if (cell == Map.Wall)  bg = COLOR_WALL;  
-                else if (cell == 'C')       bg = COLOR_CHEST;
-                else if (cell == Map.DoorClosedSy || cell == Map.DoorOpenSy) bg = COLOR_DOOR;
-                else                        bg = COLOR_EMPTY;
+
+                if
+                (cell == 'H') bg = COLOR_HERO;
+                else if
+                (cell == 'E') bg = COLOR_ENEMY;
+                else if
+                (cell == 'B') bg = COLOR_BOSS;
+                else if
+                (cell == Map.Wall) bg = COLOR_WALL;
+                else if
+                (cell == 'C')
+                    bg = COLOR_CHEST;
+                else if
+                (cell == Map.DoorClosedSy || cell == Map.DoorOpenSy) bg = COLOR_DOOR;
+                else
+                    bg = COLOR_EMPTY;
 
                 g.setColor(bg);
                 g.fillRoundRect(px + 2, py + 2, CELL_SIZE - 4, CELL_SIZE - 4, 6, 6);
@@ -235,12 +244,12 @@ public class GameGUI extends JFrame {
 
     public int showBattleMenu(String heroInfo, String enemyInfo, boolean canRun) {
         String[] options = canRun
-                ? new String[]{"Attack", " Full Heal", " Run"}
-                : new String[]{" Attack", " Full Heal", " Run (locked)"};
+                ? new String[]{"Attack", " Heal Potion", " Run"}
+                : new String[]{" Attack", " Heal Potion", " Run (locked)"};
 
         JPanel panel = new JPanel(new GridLayout(0, 1, 0, 6));
         panel.setBackground(BG_PANEL);
-        JLabel h = new JLabel(heroInfo);  h.setForeground(COLOR_HERO);  h.setFont(new Font("Monospaced", Font.BOLD, 13));
+        JLabel h = new JLabel(heroInfo); h.setForeground(COLOR_HERO);  h.setFont(new Font("Monospaced", Font.BOLD, 13));
         JLabel e = new JLabel(enemyInfo); e.setForeground(COLOR_ENEMY); e.setFont(new Font("Monospaced", Font.BOLD, 13));
         panel.add(h);
         panel.add(e);
