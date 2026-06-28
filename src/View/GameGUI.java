@@ -17,6 +17,7 @@ public class GameGUI extends JFrame {
     private static final Color COLOR_BTN   = new Color(60, 60, 60);
     private static final Color COLOR_CHEST = new Color(255, 200, 0);
     private static final Color COLOR_BTN_H = new Color(90, 90, 90);
+    private static final Color COLOR_DOOR = new Color(255, 105, 180);
     private static final int   CELL_SIZE   = 38;
 
     private final GameController controller;
@@ -185,6 +186,7 @@ public class GameGUI extends JFrame {
                 else if (cell == 'B')       bg = COLOR_BOSS;
                 else if (cell == Map.Wall)  bg = COLOR_WALL;  
                 else if (cell == 'C')       bg = COLOR_CHEST;
+                else if (cell == Map.DoorClosedSy || cell == Map.DoorOpenSy) bg = COLOR_DOOR;
                 else                        bg = COLOR_EMPTY;
 
                 g.setColor(bg);
