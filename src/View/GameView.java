@@ -78,7 +78,7 @@ public class GameView {
     }
 
     public void displayInvalidKey() {
-        System.out.println("  Invalid key. Please use W, A, S, D or Q.");
+        System.out.println("  Invalid key, Please use W, A, S, D or Q ");
     }
 
     public void displayBoundaryReached() {
@@ -86,11 +86,11 @@ public class GameView {
     }
 
     public void displayWallBlocked() {
-        System.out.println("  You cannot go through the wall.");
+        System.out.println("  You cannot go through the wall :c");
     }
 
     public void displayCellBlocked() {
-        System.out.println("  Another enemy is already there. Choose a different direction.");
+        System.out.println("  Another enemy is already there, Choose a different direction ");
     }
 
     public void displayMoved(int x, int y) {
@@ -98,7 +98,7 @@ public class GameView {
     }
 
     public void displayQuitMessage() {
-        System.out.println("  You left the dungeon. ");
+        System.out.println("  You left the dungeon  ");
     }
 
     public void displayGoodbye() {
@@ -108,7 +108,7 @@ public class GameView {
     public void displayWelcome(Hero hero, Boss boss) {
         System.out.println();
         System.out.println("+================================================+");
-        System.out.println("|                  MINECRAFT 2                   |");
+        System.out.println("|                  Minecraft 2                   |");
         System.out.println("+================================================+");
         System.out.println("|  Hero: " + padRight(hero.getName(), 40) + "|");
         System.out.println("|  Final Boss: " + padRight(boss.getName(), 34) + "|");
@@ -122,7 +122,7 @@ public class GameView {
     public void displayVictory(Hero hero) {
         System.out.println();
         System.out.println("+================================================+");
-        System.out.println("|                    * VICTORY *                 |");
+        System.out.println("|                     Victory :3                 |");
         System.out.println("+================================================+");
         System.out.println("|  " + padRight(hero.getName() + " has freed The End", 46) + "|");
         System.out.println("|  Remaining HP: " + padRight(hero.getHealth() + "/" + hero.getMaxHealth(), 32) + "|");
@@ -132,10 +132,10 @@ public class GameView {
     public void displayDefeat() {
         System.out.println();
         System.out.println("+================================================+");
-        System.out.println("|       "+RED+"           *** DEFEAT ***       "+ RESET +"          |");
+        System.out.println("|       "+RED+"           You have been defeated :c       "+ RESET +"          |");
         System.out.println("+================================================+");
-        System.out.println("|  GAME OVER                                     |");
-        System.out.println("|  Stay determined...                            |");
+        System.out.println("|  u lose                                 |");
+        System.out.println("|  Try again                            |");
         System.out.println("+================================================+");
     }
 
