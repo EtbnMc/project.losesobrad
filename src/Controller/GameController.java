@@ -61,7 +61,7 @@ public class GameController {
         if (key == 'C') {
             if (loadGame()) {
                 gui.refreshMap();
-                gui.updateHeroStatus("HERO — HP: " + hero.getHealth() + "/" + hero.getMaxHealth());
+                gui.updateHeroStatus("Hero — HP: " + hero.getHealth() + "/" + hero.getMaxHealth());
                 gui.log("Game loaded");
             }
             return;
@@ -76,10 +76,10 @@ public class GameController {
         }
 
         gui.refreshMap();
-        gui.updateHeroStatus("HERO — HP: " + hero.getHealth() + "/" + hero.getMaxHealth());
+        gui.updateHeroStatus("Hero — HP: " + hero.getHealth() + "/" + hero.getMaxHealth());
 
         if (!hero.isAlive()) {
-            gui.showMessage("defear", "Game over, try again :c ");
+            gui.showMessage("defeat", "Game over, try again :c ");
             System.exit(0);
         }
 
