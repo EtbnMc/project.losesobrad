@@ -40,7 +40,7 @@ public class GameController {
     public void startGUI() {
         setupWorld();
         gui.refreshMap();
-        gui.updateHeroStatus("HERO — HP: " + hero.getHealth() + "/" + hero.getMaxHealth());
+        gui.updateHeroStatus("Hero -- HP: " + hero.getHealth() + "/" + hero.getMaxHealth());
         gui.log("Welcome to MINECRAFT by |LosEsoBrad Inc| Use (W/S/A/D) to move around the map and defeat the Enderdragon and free the End to win ");
     }
 
@@ -61,7 +61,7 @@ public class GameController {
         if (key == 'C') {
             if (loadGame()) {
                 gui.refreshMap();
-                gui.updateHeroStatus("Hero — HP: " + hero.getHealth() + "/" + hero.getMaxHealth());
+                gui.updateHeroStatus("Hero -- HP: " + hero.getHealth() + "/" + hero.getMaxHealth());
                 gui.log("Game loaded");
             }
             return;
