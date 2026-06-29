@@ -34,7 +34,7 @@ public class GameGUI extends JFrame {
 
 
     private void buildWindow() {
-        setTitle("MINECRAFT 2");
+        setTitle("Minecraft 2");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setResizable(false);
         getContentPane().setBackground(BG_DARK);
