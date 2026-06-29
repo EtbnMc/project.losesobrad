@@ -6,19 +6,19 @@ import java.awt.event.*;
 import Controller.GameController;
 
 public class GameGUI extends JFrame {
-    private static final Color BG_DARK     = new Color(18, 18, 18);
-    private static final Color BG_PANEL    = new Color(30, 30, 30);
-    private static final Color COLOR_HERO  = new Color(0, 200, 255);
-    private static final Color COLOR_ENEMY = new Color(220, 50, 50);
-    private static final Color COLOR_BOSS  = new Color(180, 60, 220);
-    private static final Color COLOR_WALL = new Color(101, 67, 33);;
-    private static final Color COLOR_EMPTY = new Color(55, 55, 55);
-    private static final Color COLOR_TEXT  = new Color(220, 220, 220);
-    private static final Color COLOR_BTN   = new Color(60, 60, 60);
-    private static final Color COLOR_CHEST = new Color(255, 200, 0);
-    private static final Color COLOR_BTN_H = new Color(90, 90, 90);
-    private static final Color COLOR_DOOR = new Color(255, 105, 180);
-    private static final int   CELL_SIZE   = 38;
+    private static final Color backgColor     = new Color(18, 18, 18);
+    private static final Color panelColor    = new Color(30, 30, 30);
+    private static final Color heroColor  = new Color(0, 200, 255);
+    private static final Color enemyColor = new Color(220, 50, 50);
+    private static final Color bossColor  = new Color(180, 60, 220);
+    private static final Color wallColor = new Color(101, 67, 33);;
+    private static final Color emptyColor = new Color(55, 55, 55);
+    private static final Color textColor  = new Color(220, 220, 220);
+    private static final Color buttonColor   = new Color(60, 60, 60);
+    private static final Color chestColor = new Color(255, 200, 0);
+    private static final Color buttonColorH = new Color(90, 90, 90);
+    private static final Color doorColor = new Color(255, 105, 180);
+    private static final int   sizeCell   = 38;
 
     private final GameController controller;
 
@@ -35,9 +35,9 @@ public class GameGUI extends JFrame {
 
     private void buildWindow() {
         setTitle("Minecraft 2");
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setDefaultCloseOperation(exitOnClose);
         setResizable(false);
-        getContentPane().setBackground(BG_DARK);
+        getContentPane().setBackground(backgColor);
         setLayout(new BorderLayout(8, 8));
 
         add(buildTopBar(),    BorderLayout.NORTH);
@@ -52,10 +52,10 @@ public class GameGUI extends JFrame {
 
     private JPanel buildTopBar() {
         JPanel top = new JPanel(new FlowLayout(FlowLayout.LEFT, 12, 6));
-        top.setBackground(BG_PANEL);
+        top.setBackground(panelColor);
 
         heroStatusLabel = new JLabel("HERO — HP: ???");
-        heroStatusLabel.setForeground(COLOR_HERO);
+        heroStatusLabel.setForeground(heroColor);
         heroStatusLabel.setFont(new Font("Monospaced", Font.BOLD, 14));
         top.add(heroStatusLabel);
 
@@ -73,32 +73,31 @@ public class GameGUI extends JFrame {
 
     private JPanel buildMapPanel() {
         mapPanel = new JPanel() {
-            @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
                 drawMap(g);
             }
         };
-        mapPanel.setBackground(BG_DARK);
-        mapPanel.setPreferredSize(new Dimension(15 * CELL_SIZE, 15 * CELL_SIZE));
+        mapPanel.setBackground(backgColor);
+        mapPanel.setPreferredSize(new Dimension(15 * sizeCell, 15 * sizeCell));
         return mapPanel;
     }
 
     private JPanel buildSidePanel() {
         JPanel side = new JPanel(new BorderLayout(0, 6));
-        side.setBackground(BG_PANEL);
-        side.setPreferredSize(new Dimension(220, 15 * CELL_SIZE));
+        side.setBackground(backgColor);
+        side.setPreferredSize(new Dimension(220, 15 * sizeCell));
         side.setBorder(BorderFactory.createEmptyBorder(8, 8, 8, 8));
 
         JLabel logTitle = new JLabel("LOG");
-        logTitle.setForeground(COLOR_TEXT);
+        logTitle.setForeground(textColor);
         logTitle.setFont(new Font("Monospaced", Font.BOLD, 13));
         side.add(logTitle, BorderLayout.NORTH);
 
         logArea = new JTextArea();
         logArea.setEditable(false);
         logArea.setBackground(new Color(22, 22, 22));
-        logArea.setForeground(COLOR_TEXT);
+        logArea.setForeground(textColor);
         logArea.setFont(new Font("Monospaced", Font.PLAIN, 12));
         logArea.setLineWrap(true);
         logArea.setWrapStyleWord(true);
@@ -113,7 +112,7 @@ public class GameGUI extends JFrame {
 
     private JPanel buildButtons() {
         JPanel btns = new JPanel(new GridLayout(2, 2, 4, 4));
-        btns.setBackground(BG_PANEL);
+        btns.setBackground(panelColor);
 
         String[][] defs = {{"↑ W", "W"}, {"← A", "A"}, {"↓ S", "S"}, {"→ D", "D"}};
         for (String[] def : defs) {
@@ -124,11 +123,11 @@ public class GameGUI extends JFrame {
         }
 
         JPanel wrapper = new JPanel(new BorderLayout(0, 4));
-        wrapper.setBackground(BG_PANEL);
+        wrapper.setBackground(panelColor);
         wrapper.add(btns, BorderLayout.CENTER);
 
         JPanel saveLoad = new JPanel(new GridLayout(1, 2, 4, 0));
-        saveLoad.setBackground(BG_PANEL);
+        saveLoad.setBackground(panelColor);
         JButton saveBtn = makeBtn(" Save (G)");
         JButton loadBtn = makeBtn(" Load (C)");
         saveBtn.addActionListener(e -> controller.handleKey('G'));
@@ -142,14 +141,14 @@ public class GameGUI extends JFrame {
 
     private JButton makeBtn(String text) {
         JButton btn = new JButton(text);
-        btn.setBackground(COLOR_BTN);
-        btn.setForeground(COLOR_TEXT);
+        btn.setBackground(buttonColor);
+        btn.setForeground(textColor);
         btn.setFont(new Font("Monospaced", Font.BOLD, 13));
         btn.setFocusPainted(false);
         btn.setBorder(BorderFactory.createLineBorder(new Color(80, 80, 80)));
         btn.addMouseListener(new MouseAdapter() {
-            public void mouseEntered(MouseEvent e) { btn.setBackground(COLOR_BTN_H); }
-            public void mouseExited (MouseEvent e) { btn.setBackground(COLOR_BTN);   }
+            public void mouseEntered(MouseEvent e) { btn.setBackground(buttonColorH); }
+            public void mouseExited (MouseEvent e) { btn.setBackground(buttonColor);   }
         });
         return btn;
     }
@@ -157,7 +156,7 @@ public class GameGUI extends JFrame {
     private void setupKeyboard() {
         setFocusable(true);
         addKeyListener(new KeyAdapter() {
-            @Override
+        
             public void keyPressed(KeyEvent e) {
                 char c = Character.toUpperCase(e.getKeyChar());
                 if ("WASDGCQ".indexOf(c) >= 0) {
@@ -176,30 +175,30 @@ public class GameGUI extends JFrame {
 
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
-                int px = j * CELL_SIZE;
-                int py = i * CELL_SIZE;
+                int px = j * sizeCell;
+                int py = i * sizeCell;
                 char cell = grid[i][j];
 
                 Color bg;
 
                 if
-                (cell == 'H') bg = COLOR_HERO;
+                (cell == 'H') bg = heroColor;
                 else if
-                (cell == 'E') bg = COLOR_ENEMY;
+                (cell == 'E') bg = enemyColor;
                 else if
-                (cell == 'B') bg = COLOR_BOSS;
+                (cell == 'B') bg = bossColor;
                 else if
-                (cell == Map.Wall) bg = COLOR_WALL;
+                (cell == Map.Wall) bg = wallColor;
                 else if
                 (cell == 'C')
-                    bg = COLOR_CHEST;
+                    bg = chestColor;
                 else if
-                (cell == Map.DoorClosedSy || cell == Map.DoorOpenSy) bg = COLOR_DOOR;
+                (cell == Map.DoorClosedSy || cell == Map.DoorOpenSy) bg = doorColor;
                 else
-                    bg = COLOR_EMPTY;
+                    bg = emptyColor;
 
                 g.setColor(bg);
-                g.fillRoundRect(px + 2, py + 2, CELL_SIZE - 4, CELL_SIZE - 4, 6, 6);
+                g.fillRoundRect(px + 2, py + 2, sizeCell - 4, sizeCell - 4, 6, 6);
 
                 if (cell != '.' && cell != Map.Wall) {
                     g.setColor(Color.WHITE);
@@ -207,12 +206,12 @@ public class GameGUI extends JFrame {
                     FontMetrics fm = g.getFontMetrics();
                     String s = String.valueOf(cell);
                     g.drawString(s,
-                            px + (CELL_SIZE - fm.stringWidth(s)) / 2,
-                            py + (CELL_SIZE + fm.getAscent()) / 2 - 2);
+                            px + (sizeCell - fm.stringWidth(s)) / 2,
+                            py + (sizeCell + fm.getAscent()) / 2 - 2);
                 }
 
                 g.setColor(bg);
-                g.fillRoundRect(px + 2, py + 2, CELL_SIZE - 4, CELL_SIZE - 4, 6, 6);
+                g.fillRoundRect(px + 2, py + 2, sizeCell - 4, sizeCell - 4, 6, 6);
 
                 if (cell != '.' && cell != '—') {
                     g.setColor(Color.WHITE);
@@ -220,8 +219,8 @@ public class GameGUI extends JFrame {
                     FontMetrics fm = g.getFontMetrics();
                     String s = String.valueOf(cell);
                     g.drawString(s,
-                            px + (CELL_SIZE - fm.stringWidth(s)) / 2,
-                            py + (CELL_SIZE + fm.getAscent()) / 2 - 2);
+                            px + (sizeCell - fm.stringWidth(s)) / 2,
+                            py + (sizeCell + fm.getAscent()) / 2 - 2);
                 }
             }
         }
@@ -248,25 +247,25 @@ public class GameGUI extends JFrame {
                 : new String[]{" Attack", " Heal Potion", " Run (locked)"};
 
         JPanel panel = new JPanel(new GridLayout(0, 1, 0, 6));
-        panel.setBackground(BG_PANEL);
-        JLabel h = new JLabel(heroInfo); h.setForeground(COLOR_HERO);  h.setFont(new Font("Monospaced", Font.BOLD, 13));
-        JLabel e = new JLabel(enemyInfo); e.setForeground(COLOR_ENEMY); e.setFont(new Font("Monospaced", Font.BOLD, 13));
+        panel.setBackground(panelColor);
+        JLabel h = new JLabel(heroInfo); h.setForeground(heroColor);  h.setFont(new Font("Monospaced", Font.BOLD, 13));
+        JLabel e = new JLabel(enemyInfo); e.setForeground(enemyColor); e.setFont(new Font("Monospaced", Font.BOLD, 13));
         panel.add(h);
         panel.add(e);
 
-        UIManager.put("OptionPane.background", BG_PANEL);
-        UIManager.put("Panel.background", BG_PANEL);
-        UIManager.put("OptionPane.messageForeground", COLOR_TEXT);
+        UIManager.put("OptionPane.background", backgColor);
+        UIManager.put("Panel.background", panelColor);
+        UIManager.put("OptionPane.messageForeground", textColor);
 
         int result = JOptionPane.showOptionDialog(
                 this, panel, " BATTLE",
-                JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE,
+                JOptionPane.defaultOp, plainMessage,
                 null, options, options[0]);
 
         return (result < 0) ? 1 : result + 1;   // esto le dará 1=atk 2=heal 3=run
     }
 
     public void showMessage(String title, String msg) {
-        JOptionPane.showMessageDialog(this, msg, title, JOptionPane.PLAIN_MESSAGE);
+        JOptionPane.showMessageDialog(this, msg, title, JOptionPane.plainMessage);
     }
 }
