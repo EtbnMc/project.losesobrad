@@ -35,7 +35,7 @@ public class GameGUI extends JFrame {
 
     private void buildWindow() {
         setTitle("Minecraft 2");
-        setDefaultCloseOperation(exitOnClose);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
         setResizable(false);
         getContentPane().setBackground(backgColor);
         setLayout(new BorderLayout(8, 8));
@@ -257,15 +257,14 @@ public class GameGUI extends JFrame {
         UIManager.put("Panel.background", panelColor);
         UIManager.put("OptionPane.messageForeground", textColor);
 
-        int result = JOptionPane.showOptionDialog(
-                this, panel, " BATTLE",
-                JOptionPane.defaultOp, plainMessage,
+             int result = JOptionPane.showOptionDialog(
+                this, panel, " Battle",
+                JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE,
                 null, options, options[0]);
-
         return (result < 0) ? 1 : result + 1;   // esto le dará 1=atk 2=heal 3=run
     }
 
-    public void showMessage(String title, String msg) {
-        JOptionPane.showMessageDialog(this, msg, title, JOptionPane.plainMessage);
+ public void showMessage(String title, String msg) {
+        JOptionPane.showMessageDialog(this, msg, title, JOptionPane.PLAIN_MESSAGE);
     }
 }
