@@ -325,7 +325,7 @@ public class GameController {
     }
 
     private boolean runBattle(Enemy enemy, boolean isBossFight) {
-        if (gui != null) gui.log("=== BATTLE: " + hero.getName() + " vs " + enemy.getName() + " ===");
+        if (gui != null) gui.log("=== Battle: " + hero.getName() + " vs " + enemy.getName() + " ===");
         else view.displayCombatStart(hero.getName(), enemy.getName(), isBossFight);
 
         boolean canRun = !isBossFight;
